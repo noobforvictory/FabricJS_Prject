@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project</title>
+    <script src="fabric.min.js"></script>
+    <script src="jquery.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+    
+    <div class="two"> 
+     <form id="uploadImg" runat="server">
+    <input type="file" id="uploadedImg"/>
+     </form>    
+     <canvas id="c" height="500" width="800"></canvas>
+    </div> 
+</div> 
+    <script>
+        var canvas=new fabric.Canvas('c');
+    document.getElementById('uploadedImg').onchange = function handleImage(e) {
+    var reader = new FileReader();
+    reader.onload = function (event){
+    var imgObj = new Image();
+    imgObj.src = event.target.result;
+    imgObj.onload = function () {
+      var image = new fabric.Image(imgObj);
+      image.set({
+            angle: 0,
+            padding: 10,
+            cornersize:10,
+            height:500,
+            width:800,
+      });
+     
+      canvas.add(image);
+     
+    }
+  }
+  reader.readAsDataURL(e.target.files[0]);
+}     
+
+canvas.on('mouse:wheel', function(opt) {
+var delta = opt.e.deltaY;
+var zoom = canvas.getZoom();
+zoom *= 0.999 ** delta;
+if (zoom > 20) zoom = 20;
+if (zoom < 0.01) zoom = 0.01;
+canvas.zoomToPoint({ x: opt.e.offsetX, y: opt.e.offsetY }, zoom);
+opt.e.preventDefault();
+opt.e.stopPropagation();
+var vpt = this.viewportTransform;
+if (zoom < 400 / 1000) {
+  vpt[4] = 200 - 1000 * zoom / 2;
+  vpt[5] = 200 - 1000 * zoom / 2;
+} else {
+  if (vpt[4] >= 0) {
+    vpt[4] = 0;
+  } else if (vpt[4] < canvas.getWidth() - 1000 * zoom) {
+    vpt[4] = canvas.getWidth() - 1000 * zoom;
+  }
+  if (vpt[5] >= 0) {
+    vpt[5] = 0;
+  } else if (vpt[5] < canvas.getHeight() - 1000 * zoom) {
+    vpt[5] = canvas.getHeight() - 1000 * zoom;
+  }
+
+}
+})
+
+    </script>
+</body>
+</html>
