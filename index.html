@@ -20,7 +20,9 @@
     </div> 
 </div> 
     <script>
-        var canvas=new fabric.Canvas('c');
+       var canvas=new fabric.Canvas('c');
+       
+
     document.getElementById('uploadedImg').onchange = function handleImage(e) {
     var reader = new FileReader();
     reader.onload = function (event){
@@ -47,15 +49,15 @@ canvas.on('mouse:wheel', function(opt) {
   var zoom = canvas.getZoom();
   zoom *= 0.999 ** delta;
   if (zoom > 20) zoom = 20;
-  if (zoom < 0.01) zoom = 0.01;
+  if (zoom < 1) zoom = 1;
   canvas.zoomToPoint({ x: opt.e.offsetX, y: opt.e.offsetY }, zoom);
-  if(zoom<=1){
-    canvas.setViewportTransform([1,0,0,1,0,0]);
+  if(zoom<1 ){
+   canvas.setViewportTransform([1,0,0,1,0,0]);
+  
   }
   opt.e.preventDefault();
   opt.e.stopPropagation();
 });
-
     </script>
 </body>
 </html>
